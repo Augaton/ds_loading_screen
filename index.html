@@ -2,29 +2,27 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" href="css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600&display=swap" rel="stylesheet">
-
     <title>Demon Slayer – Chargement</title>
 </head>
 
 <body>
 
-    <!-- FONDS -->
-    <div id="background"></div>
-    <div id="background-next"></div>
+    <!-- Fond Backstretch (géré par JS) -->
+    <div id="overlay"></div>
+
+    <!-- Coup de sabre -->
     <div id="slash-mask"></div>
 
-    <!-- LOGO -->
-    <img id="slayer-logo" alt="Logo">
+    <!-- Logo -->
+    <img id="slayer-logo" alt="logo">
 
-    <!-- UI -->
+    <!-- Texte + Barre -->
     <div id="content">
-
         <h1 id="server-name"></h1>
         <h2 id="subtitle">Chargement en cours…</h2>
 
@@ -32,24 +30,20 @@
             <div id="loading-fill"></div>
         </div>
 
+        <div id="status-text"></div>
+        <div id="file-count"></div>
+        <div id="percent-text"></div>
+
         <div id="tip"></div>
-
-        <div id="load-status">
-            <div id="status-text"></div>
-            <div id="file-count"></div>
-            <div id="percent-text"></div>
-        </div>
-
     </div>
 
     <audio id="music-player" loop></audio>
 
-    <!-- SCRIPTS -->
+    <!-- Scripts -->
     <script src="js/lib/jquery-3.7.1.min.js"></script>
     <script src="js/lib/jquery.backstretch.min.js"></script>
 
     <script src="js/config.js"></script>
     <script src="js/main.js"></script>
-
 </body>
 </html>

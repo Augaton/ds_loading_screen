@@ -3,7 +3,7 @@
 ================================= */
 
 :root {
-    --color: #ffffff; /* sera remplacé par le JS */
+    --color: #ffffff;
 }
 
 * {
@@ -22,25 +22,71 @@ html, body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* PRIORITÉ BACKSTRETCH (fond réel) */
+/* ==============================
+            FOND
+================================= */
+
+/* Fond Backstretch (fond principal — unique) */
 .backstretch {
     position: fixed !important;
     inset: 0 !important;
-    z-index: -10 !important; /* toujours au fond */
+    z-index: -20 !important;
     object-fit: cover !important;
-    filter: brightness(0.52) blur(2px);
+    filter: brightness(0.5) blur(2px);
 }
 
-/* Empêche #background et #background-next de masquer Backstretch */
-#background,
-#background-next {
-    z-index: -5 !important;
-    background: transparent !important;
+/* Overlay assombri */
+#overlay {
     position: fixed;
+    inset: 0;
+    background-color: rgba(0,0,0,0.30);
+    z-index: -10;
 }
 
+/* ==============================
+            SABRE
+================================= */
 
-/* CRT Lignes */
+#slash-mask {
+    position: fixed;
+    inset: 0;
+    z-index: 50;             /* toujours au-dessus de tout */
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+    transition: opacity 0.2s ease-out;
+}
+
+#slash-mask::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 3px;
+    height: 100%;
+    background: white;
+    box-shadow:
+        0 0 25px white,
+        0 0 50px var(--color),
+        0 0 90px var(--color);
+    transform: translateX(-50%);
+    opacity: 0;
+}
+
+.slash-open::before {
+    opacity: 1;
+    animation: slashExpand 0.25s ease-out forwards;
+}
+
+@keyframes slashExpand {
+    0% { width: 3px; }
+    100% { width: 100%; }
+}
+
+/* ==============================
+        FILTRE CRT
+================================= */
+
 body::before {
     content: "";
     position: fixed;
@@ -50,29 +96,11 @@ body::before {
         transparent 0 2px,
         rgba(255,255,255,0.02) 2px 4px
     );
+    z-index: 2; /* au-dessus du fond, sous le contenu */
 }
 
 /* ==============================
-         FOND + ANIMATION
-================================= */
-
-#background {
-    position: fixed;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    filter: brightness(0.52) blur(2px);
-    transform: translateZ(0); /* GPU */
-    animation: bgMove 12s infinite ease-in-out;
-}
-
-@keyframes bgMove {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.06); }
-}
-
-/* ==============================
-             LOGO
+           LOGO
 ================================= */
 
 #slayer-logo {
@@ -80,12 +108,13 @@ body::before {
     top: 20px;
     left: 20px;
     width: 150px;
+    z-index: 15;
     filter: drop-shadow(0 0 15px var(--color)) drop-shadow(0 0 30px var(--color));
     transition: filter 0.3s;
 }
 
 /* ==============================
-           CONTENU CENTRAL
+       CONTENU & TEXTE
 ================================= */
 
 #content {
@@ -93,6 +122,7 @@ body::before {
     bottom: 12%;
     width: 100%;
     text-align: center;
+    z-index: 10;
     text-shadow: 0 0 8px #000;
 }
 
@@ -113,7 +143,7 @@ body::before {
 }
 
 /* ==============================
-           BARRE DE LOAD
+       BARRE DE CHARGEMENT
 ================================= */
 
 #loading-bar {
@@ -130,7 +160,6 @@ body::before {
     height: 100%;
     background: linear-gradient(90deg, var(--color), transparent);
     animation: breathing 3s infinite ease-in-out;
-    transform: translateZ(0); /* GPU */
 }
 
 @keyframes breathing {
@@ -157,7 +186,7 @@ body::before {
 }
 
 /* ==============================
-           STATUT CHARGEMENT
+         STATUT CHARGEMENT
 ================================= */
 
 #load-status {
@@ -168,17 +197,7 @@ body::before {
     line-height: 1.5rem;
     font-size: 1.3rem;
     color: white;
-    text-shadow: 0 0 8px #000;
-}
-
-#status-text {
-    opacity: .9;
-    font-size: 1.2rem;
-}
-
-#file-count {
-    opacity: .85;
-    font-size: 1.1rem;
+    z-index: 10;
 }
 
 #percent-text {
@@ -187,78 +206,4 @@ body::before {
     font-weight: bold;
     color: var(--color);
     text-shadow: 0 0 12px var(--color);
-}
-
-/* ==============================
-         TRANSITIONS GÉNÉRALES
-================================= */
-
-.transition-fade {
-    transition: opacity 1.5s ease-in-out, filter 1.5s;
-}
-
-.fade-out {
-    opacity: 0;
-    filter: blur(8px);
-}
-
-.fade-in {
-    opacity: 1;
-}
-
-/* ============================================
-     PRE-FADE SYSTEM (BACKGROUND LAYER)
-============================================ */
-
-#background-next {
-    position: fixed;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    filter: brightness(0.52) blur(2px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 1.4s ease-in-out;
-}
-
-/* ============================================
-   FADE VERTICAL / COUP DE SABRE
-============================================ */
-
-#slash-mask {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 20; /* au-dessus de tout */
-    opacity: 0;
-    transition: opacity 0.2s ease-out;
-}
-
-/* Lignes du tranchant */
-#slash-mask::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 3px; /* ligne centrale */
-    height: 100%;
-    background: white;
-    box-shadow:
-        0 0 25px white,
-        0 0 50px var(--color),
-        0 0 90px var(--color);
-    transform: translateX(-50%);
-    opacity: 0;
-}
-
-/* Ouverture du sabre */
-.slash-open::before {
-    opacity: 1;
-    animation: slashExpand 0.25s ease-out forwards;
-}
-
-@keyframes slashExpand {
-    0% { width: 3px; }
-    100% { width: 100%; }
 }
