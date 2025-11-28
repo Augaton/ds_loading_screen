@@ -16,6 +16,7 @@ function shuffle(array) {
 
 var neededFiles;
 var downloadedFiles = 0;
+var barElements = null;
 
 // Fonctions appelées par Garry's Mod
 function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
@@ -207,6 +208,9 @@ function nextMusic() {
 
     // Nom affiché
     setMusicName(track.name);
+
+	$("#music-box").addClass("music-pulse");
+	setTimeout(() => { $("#music-box").removeClass("music-pulse"); }, 500);
 
     // Quand terminé → suivant
     audioPlayer.onended = function() {

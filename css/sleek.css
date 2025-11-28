@@ -116,12 +116,27 @@ html, body {
 
     background: rgba(0,0,0,0.45);
     border-left: 3px solid #ff4e4e;
-    border-radius: 5px;
+    border-radius: 4px;
+	backdrop-filter: blur(3px);
 
     pointer-events: none;
     z-index: 2;
 
     display: none; /* activé via JS */
+
+	transition: filter 0.4s ease, opacity 0.4s ease;
+	animation: ds-breathe 3.8s ease-in-out infinite;
+}
+
+@keyframes ds-breathe {
+    0%   { transform: translate(0,0) scale(1); opacity: .9; }
+    50%  { transform: translate(0,-2px) scale(1.03); opacity: 1; }
+    100% { transform: translate(0,0) scale(1); opacity: .9; }
+}
+
+#music-box.music-pulse {
+    filter: drop-shadow(0 0 10px #ff4e4e);
+    opacity: 1;
 }
 
 .music-title {
