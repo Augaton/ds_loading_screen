@@ -1,4 +1,5 @@
 "use strict";
+const BASE = window.location.origin + "/ds_loading_screen/";
 
 /* ============================================================
                    VARIABLES GLOBALES
@@ -150,13 +151,13 @@ function setPillar(p) {
     document.documentElement.style.setProperty("--color", Config.colors[p]);
 
     const logo = document.getElementById("slayer-logo");
-    if (logo) logo.src = "images/" + Config.logo;
+    if (logo) logo.src = BASE + "images/" + Config.logo;
 
     const bg = document.getElementById("background");
-    if (bg) bg.style.backgroundImage = 'url("' + window.location.origin + "/ds_loading_screen/images/" + Config.backgrounds[p] + '")';
+    if (bg) bg.style.backgroundImage = 'url("' + BASE + "images/" + Config.backgrounds[p] + '")';
 
     const music = document.getElementById("music-player");
-    if (music) music.src = "music/" + Config.music[p];
+    if (music) music.src = BASE + "music/" + Config.music[p];
 }
 
 /* --- Transition douce --- */
@@ -166,7 +167,7 @@ function fadeToPillar(p) {
     const bgNext = document.getElementById("background-next");
     const slash = document.getElementById("slash-mask");
 
-    const nextImage = window.location.origin + "/ds_loading_screen/images/" + Config.backgrounds[p];
+    const nextImage = BASE + "images/" + Config.backgrounds[p];
 
     // PRÉCHARGE l’image suivante
     const img = new Image();
@@ -220,8 +221,8 @@ function fadeToPillar(p) {
         --------------------------------- */
 
         document.documentElement.style.setProperty("--color", Config.colors[p]);
-        document.getElementById("slayer-logo").src = "images/" + Config.logo;
-        document.getElementById("music-player").src = "music/" + Config.music[p];
+        document.getElementById("slayer-logo").src = BASE + "images/" + Config.logo;
+        document.getElementById("music-player").src = BASE + "music/" + Config.music[p];
     };
 }
 
