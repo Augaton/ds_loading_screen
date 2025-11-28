@@ -1,17 +1,20 @@
 "use strict";
 
-/* ==============================================
-       URL ABSOLUE AUTOMATIQUE (GitHub Pages)
-============================================== */
+/* URL ABSOLUE AUTOMATIQUE POUR GITHUB PAGES */
 function full(path) {
     return new URL(path, window.location.href).href;
 }
 
-/* ==============================================
-                GMod Events
-============================================== */
+/* ============================================================
+   VARIABLES GLOBALES
+============================================================ */
 
+var isGmod = false;
 var totalFiles = 0;
+
+/* ============================================================
+   EVENEMENTS GARRY'S MOD
+============================================================ */
 
 window.SetFilesTotal = function(total) {
     totalFiles = total;
@@ -34,60 +37,91 @@ window.AddProgress = function(progress) {
     $("#percent-text").text(Math.round(progress) + "%");
 };
 
-window.DownloadingFile = function(fileName) {
-    $("#status-text").text("Téléchargement : " + fileName);
+window.DownloadingFile = function(filename) {
+    $("#status-text").text("Téléchargement : " + filename);
 };
 
 window.SetStatusChanged = function(status) {
+
     $("#status-text").text(status);
 
     if (status === "Workshop Complete") {
         $("#loading-fill").css("width", "80%");
         $("#percent-text").text("80%");
     }
-    if (status === "Client info sent!") {
+    else if (status === "Client info sent!") {
         $("#loading-fill").css("width", "95%");
         $("#percent-text").text("95%");
     }
-    if (status === "Starting Lua...") {
+    else if (status === "Starting Lua...") {
         $("#loading-fill").css("width", "100%");
         $("#percent-text").text("100%");
     }
 };
 
-/* ==============================================
-        CHARGEMENT / BACKGROUND / LOGO / MUSIQUE
-============================================== */
+/* ============================================================
+   GAME DETAILS (GMod)
+============================================================ */
+
+function GameDetails(servername, serverurl, mapname, maxplayers, steamid) {
+    isGmod = true;
+
+    if (Config.title)
+        $("#title").html(Config.title);
+    else
+        $("#title").html(servername);
+
+    if (Config.enableMap) {
+        $("#map").append(mapname);
+        $("#map").fadeIn();
+    } else {
+        $("#map").hide();
+    }
+
+    if (Config.enableSteamID)
+        $("#steamid").html(steamid);
+
+    $("#steamid").fadeIn();
+}
+
+/* ============================================================
+   SYSTEME DES SOUFFLES (FOND / LOGO / MUSIQUE)
+============================================================ */
 
 function setPillar(p) {
 
+    /* Couleur */
     document.documentElement.style.setProperty("--color", Config.colors[p]);
 
+    /* Logo */
     $("#slayer-logo").attr("src", full("images/" + Config.logo));
 
+    /* Musique */
     $("#music-player").attr("src", full("music/" + Config.music[p]));
 
-    // Backstretch pour afficher le fond
+    /* FOND (Backstretch - toujours visible) */
     $.backstretch(full("images/" + Config.backgrounds[p]));
 }
 
-/* ==============================================
-           Coup de sabre + changement de fond
-============================================== */
+/* ============================================================
+   FADE + COUP DE SABRE
+============================================================ */
 
 function fadeToPillar(p) {
 
     const slash = document.getElementById("slash-mask");
 
-    // Effet coup de sabre
+    // Animation coup de sabre
     slash.classList.add("slash-open");
     slash.style.opacity = 1;
 
+    // Après l'ouverture du sabre
     setTimeout(() => {
 
-        // Changement via Backstretch (fiable)
+        // Change fond via Backstretch (fiable)
         $.backstretch(full("images/" + Config.backgrounds[p]));
 
+        // Fermeture sabre
         setTimeout(() => {
             slash.style.opacity = 0;
             slash.classList.remove("slash-open");
@@ -95,15 +129,15 @@ function fadeToPillar(p) {
 
     }, 150);
 
-    // Mise à jour couleurs / logo / musique
+    // Mise à jour couleur / logo / musique
     document.documentElement.style.setProperty("--color", Config.colors[p]);
     $("#slayer-logo").attr("src", full("images/" + Config.logo));
     $("#music-player").attr("src", full("music/" + Config.music[p]));
 }
 
-/* ==============================================
-                 TIPS
-============================================== */
+/* ============================================================
+   ASTUCES (TIPS)
+============================================================ */
 
 function startTipsRotation() {
     if (!Config.tips || !Config.tips.length) return;
@@ -117,18 +151,18 @@ function startTipsRotation() {
     setInterval(change, 8000);
 }
 
-/* ==============================================
-                 INIT
-============================================== */
+/* ============================================================
+   INIT
+============================================================ */
 
 window.onload = () => {
 
-    // Fond initial + logo + musique
+    /* Premier souffle */
     setPillar(Config.pillar);
 
     startTipsRotation();
 
-    // Cycle automatique
+    /* Cycle automatique */
     if (Config.cycle.enabled) {
 
         let index = Config.cycle.order.indexOf(Config.pillar);
