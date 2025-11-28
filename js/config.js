@@ -45,29 +45,18 @@ var l_bgImageFadeVelocity = 2500;
    0 = aucun, 100 = noir complet */
 var l_bgDarkening = 55;
 
-/* Lecteur de musique (true / false) */
 var l_music = true;
-
-/* Afficher le nom du morceau ? */
 var l_musicDisplay = true;
 
-/* Playlist Demon Slayer
-   (combinaison YouTube + .ogg locales) */
 var l_musicPlaylist = [
-    // Tu peux remplacer par tes propres .ogg
-    { ogg: "songs/ds_theme_1.ogg", name: "Souffle de la Flamme — Thème" },
-    { ogg: "songs/ds_theme_2.ogg", name: "Souffle de l’Eau — Thème" },
-
-    // Exemples YouTube (remplace si tu veux éviter l’API YT)
-    { youtube: "CwkzK-F0Y00", name: "Demon Slayer OST — Kamado Tanjiro no Uta" },
-    { youtube: "J0dOBewBfKQ", name: "Demon Slayer OST — Main Theme" }
+    {ogg: "songs/ds_theme_1.ogg", name: "Souffle de la Lumière"},
+    {ogg: "songs/ds_theme_2.ogg", name: "Souffle de la Flamme"},
+    {ogg: "songs/ds_theme_3.ogg", name: "Souffle de l’Eau"}
 ];
 
-/* Ordre aléatoire de la playlist ? */
 var l_musicRandom = true;
+var l_musicVolume = 40;
 
-/* Volume (0 à 100) */
-var l_musicVolume = 25;
 
 /* Activer les messages personnalisés ? */
 var l_messagesEnabled = true;

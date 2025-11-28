@@ -182,28 +182,48 @@ function onPlayerStateChange(event) {
     }
 }
 
+//--------------------------------------------------
+//  AUDIO LOCAL + VISUALISATION "RESPIRATION / PULSATION"
+//--------------------------------------------------
+
+var audioPlayer = null;
+var currentTrack = -1;
+
 function nextMusic() {
-    actualMusic++;
+    currentTrack++;
 
-    if (actualMusic >= l_musicPlaylist.length) {
-        actualMusic = 0;
-    }
+    if (currentTrack >= l_musicPlaylist.length)
+        currentTrack = 0;
 
-    var atual = l_musicPlaylist[actualMusic];
+    var track = l_musicPlaylist[currentTrack];
 
-    if (atual.youtube) {
-        youtubePlayer.loadVideoById(atual.youtube);
-    } else {
-        $("body").append('<audio src="' + atual.ogg + '" autoplay>');
-        $("audio").prop('volume', l_musicVolume / 100);
-        $("audio").bind("ended", function () {
-            $(this).remove();
-            nextMusic();
-        });
-    }
+    // On supprime l'ancien son
+    $("audio").remove();
 
-    setMusicName(atual.name);
+    // Nouveau son
+    $("body").append('<audio id="music-audio" src="' + track.ogg + '" autoplay>');
+    audioPlayer = document.getElementById("music-audio");
+    audioPlayer.volume = l_musicVolume / 100;
+
+    // Nom affiché
+    setMusicName(track.name);
+
+    // Quand terminé → suivant
+    audioPlayer.onended = function() {
+        nextMusic();
+    };
+
+    startVisualizer();
 }
+
+// Départ automatique
+$(function() {
+    if (l_music) {
+        $("#music-box").show();
+        nextMusic();
+    }
+});
+
 
 // Messages (tips Demon Slayer)
 function showMessage(message) {
@@ -218,4 +238,65 @@ function showMessage(message) {
     setTimeout(function () {
         showMessage(message + 1);
     }, l_messagesDelay + l_messagesFade * 2);
+}
+
+//--------------------------------------------------
+// VISUALISATION : RESPIRATION + PARTICULES
+//--------------------------------------------------
+
+var breathingIntensity = 0;
+var breathingDirection = 1;
+var particleInterval = null;
+
+function startVisualizer() {
+
+    // Effet respiration (pulsation panneau)
+    clearInterval(particleInterval);
+    particleInterval = setInterval(function() {
+
+        if (!audioPlayer) return;
+
+        // Intensité basée sur le volume instantané du .ogg
+        // (on simule une "lecture amplitude" car pas de WebAudio API)
+        breathingIntensity += 0.03 * breathingDirection;
+
+        if (breathingIntensity > 1) {
+            breathingIntensity = 1;
+            breathingDirection = -1;
+        }
+        if (breathingIntensity < 0) {
+            breathingIntensity = 0;
+            breathingDirection = 1;
+        }
+
+        // Effet sur panneau
+        $("#panel").css("box-shadow", "0 0 " + (10 + breathingIntensity * 30) + "px rgba(255,40,40," + (0.4 + breathingIntensity * 0.4) + ")");
+
+        // Particules
+        spawnParticle(breathingIntensity);
+
+    }, 50);
+}
+
+function spawnParticle(power) {
+
+    var p = $("<div class='ds-particle'></div>");
+    $("body").append(p);
+
+    var size = 4 + power * 12;
+
+    p.css({
+        left: (Math.random() * window.innerWidth) + "px",
+        top: (window.innerHeight - 50) + "px",
+        width: size + "px",
+        height: size + "px",
+        opacity: 0.3 + power * 0.4
+    });
+
+    p.animate({
+        top: "-=200",
+        opacity: 0
+    }, 1200 + Math.random() * 600, "linear", function() {
+        p.remove();
+    });
 }
