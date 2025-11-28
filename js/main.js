@@ -99,7 +99,6 @@ function setMusicName(name) {
     });
 }
 
-var youtubePlayer;
 var actualMusic = -1;
 
 // Initialisation DOM / thème Demon Slayer
@@ -119,11 +118,13 @@ $(function () {
         showMessage(0);
 
     // Musique
-    if (l_music) {
-        loadYoutube();
-        if (l_musicDisplay)
-            $("#music").fadeIn(2000);
-    }
+	if (l_music) {
+		if (l_musicDisplay)
+			$("#music-box").show();
+
+		nextMusic(); // lecture locale uniquement
+	}
+
 
     // Fond (vidéo ou images backstretch)
     if (l_bgVideo) {
@@ -150,38 +151,6 @@ $(function () {
     var k = kanjiList[Math.floor(Math.random() * kanjiList.length)];
     $("#kanji").html(k);
 });
-
-// Gestion du lecteur YouTube
-function loadYoutube() {
-    var tag = document.createElement('script');
-
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-}
-
-function onYouTubeIframeAPIReady() {
-    youtubePlayer = new YT.Player('player', {
-        height: '390',
-        width: '640',
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        }
-    });
-}
-
-function onPlayerReady(event) {
-    youtubePlayer.setVolume(l_musicVolume);
-    if (youtubePlayer.isMuted()) youtubePlayer.unMute();
-    nextMusic();
-}
-
-function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.ENDED) {
-        nextMusic();
-    }
-}
 
 //--------------------------------------------------
 //  AUDIO LOCAL + VISUALISATION "RESPIRATION / PULSATION"
@@ -221,12 +190,13 @@ function nextMusic() {
 }
 
 // Départ automatique
-$(function() {
-    if (l_music) {
+if (l_music) {
+    if (l_musicDisplay)
         $("#music-box").show();
-        nextMusic();
-    }
-});
+
+    nextMusic(); // lecture locale uniquement
+}
+
 
 
 // Messages (tips Demon Slayer)
