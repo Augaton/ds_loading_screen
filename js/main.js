@@ -153,7 +153,7 @@ function setPillar(p) {
     if (logo) logo.src = "images/" + Config.logo;
 
     const bg = document.getElementById("background");
-    if (bg) bg.style.backgroundImage = 'url("' + window.location.origin + "/loading-screen-demonslayer/images/" + Config.backgrounds[p] + '")';
+    if (bg) bg.style.backgroundImage = 'url("' + window.location.origin + "/ds_loading_screen/images/" + Config.backgrounds[p] + '")';
 
     const music = document.getElementById("music-player");
     if (music) music.src = "music/" + Config.music[p];
@@ -166,7 +166,7 @@ function fadeToPillar(p) {
     const bgNext = document.getElementById("background-next");
     const slash = document.getElementById("slash-mask");
 
-    const nextImage = window.location.origin + "/loading-screen-demonslayer/images/" + Config.backgrounds[p];
+    const nextImage = window.location.origin + "/ds_loading_screen/images/" + Config.backgrounds[p];
 
     // PRÉCHARGE l’image suivante
     const img = new Image();
