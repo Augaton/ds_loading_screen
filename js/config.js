@@ -12,11 +12,11 @@ Config = {
     },
 
     backgrounds: {
-        sun: "bg_sun.png",
-        flame: "bg_flame.png",
-        water: "bg_water.png",
-        thunder: "bg_thunder.png",
-        moon: "bg_moon.png"
+        sun: "bg_sun.jpg",
+        flame: "bg_flame.jpg",
+        water: "bg_water.jpg",
+        thunder: "bg_thunder.jpg",
+        moon: "bg_moon.jpg"
     },
 
     logo: "logo_slayers.png",
