@@ -1,43 +1,92 @@
-Config = {
-    pillar: "sun",
+/*    _           _    _                     _
+     | |         | |  | |                   | |
+  ___| | ___  ___| | _| |     ___   __ _  __| |
+ / __| |/ _ \/ _ \ |/ / |    / _ \ / _` |/ _` |
+ \__ \ |  __/  __/   <| |___| (_) | (_| | (_| |
+ |___/_|\___|\___|_|\_\______\___/ \__,_|\__,_|
+    version 2.05 — Demon Slayer Edition
+*/
 
-    serverName: "Demon Slayer – Corps des Pourfendeurs",
+/* URL du logo serveur
+   Laisse vide pour n’utiliser que du texte */
+var l_serverImage = "images/logo_slayers.png";
 
-    colors: {
-        sun:     "#ff3030",
-        flame:   "#ff7a2f",
-        water:   "#4fc3ff",
-        thunder: "#ffe600",
-        moon:    "#b48bff"
-    },
+/* Nom personnalisé du serveur
+   Laisse vide pour utiliser le nom envoyé par le serveur */
+var l_serverName = "Perdium Demon Slayer";
 
-    backgrounds: {
-        sun:     "bg_sun.jpg",
-        flame:   "bg_flame.jpg",
-        water:   "bg_water.jpg",
-        thunder: "bg_thunder.jpg",
-        moon:    "bg_moon.jpg"
-    },
+/* Utiliser une vidéo comme fond ?
+   Sinon on utilise les images (recommandé pour GMod) */
+var l_bgVideo = false;
 
-    logo: "logo_slayers.png",
+/* Vidéo de fond (si l_bgVideo = true) */
+var l_background = "backgrounds/videos/glimmering.webm";
 
-    music: {
-        sun:     "sun_theme.mp3",
-        flame:   "placeholder.mp3",
-        water:   "placeholder.mp3",
-        thunder: "placeholder.mp3",
-        moon:    "placeholder.mp3"
-    },
+/* Images de fond
+   Tu peux en ajouter / retirer autant que tu veux */
+var l_bgImages = [
+    "backgrounds/images/bg_flame.jpg",
+    "backgrounds/images/bg_moon.jpg",
+    "backgrounds/images/bg_sun.jpg",
+    "backgrounds/images/bg_thunder.jpg",
+    "backgrounds/images/bg_water.jpg"
+];
 
-    tips: [
-        "Affûtez votre souffle.",
-        "Les démons rôdent dans les ténèbres.",
-        "Votre cœur est votre lame."
-    ]
-};
+/* Ordre aléatoire des images de fond ? */
+var l_bgImagesRandom = true;
 
-Config.cycle = {
-    enabled: true,
-    delay: 8000,
-    order: ["sun", "flame", "water", "thunder", "moon"]
-};
+/* Durée d’affichage de chaque fond (ms) */
+var l_bgImageDuration = 7000;
+
+/* Vitesse de fondu entre deux fonds (ms) */
+var l_bgImageFadeVelocity = 2500;
+
+/* Assombrissement de l’arrière-plan
+   0 = aucun, 100 = noir complet */
+var l_bgDarkening = 55;
+
+/* Lecteur de musique (true / false) */
+var l_music = true;
+
+/* Afficher le nom du morceau ? */
+var l_musicDisplay = true;
+
+/* Playlist Demon Slayer
+   (combinaison YouTube + .ogg locales) */
+var l_musicPlaylist = [
+    // Tu peux remplacer par tes propres .ogg
+    { ogg: "songs/ds_theme_1.ogg", name: "Souffle de la Flamme — Thème" },
+    { ogg: "songs/ds_theme_2.ogg", name: "Souffle de l’Eau — Thème" },
+
+    // Exemples YouTube (remplace si tu veux éviter l’API YT)
+    { youtube: "CwkzK-F0Y00", name: "Demon Slayer OST — Kamado Tanjiro no Uta" },
+    { youtube: "J0dOBewBfKQ", name: "Demon Slayer OST — Main Theme" }
+];
+
+/* Ordre aléatoire de la playlist ? */
+var l_musicRandom = true;
+
+/* Volume (0 à 100) */
+var l_musicVolume = 25;
+
+/* Activer les messages personnalisés ? */
+var l_messagesEnabled = true;
+
+/* Messages / tips Demon Slayer */
+var l_messages = [
+    "« Même si tu es faible, tu peux devenir fort. » — Kamado Tanjiro",
+    "Affûtez votre lame comme votre esprit. La moindre hésitation peut être fatale.",
+    "Les Souffles ne sont pas que des techniques : ce sont des chemins de vie.",
+    "Kanao ne suit plus une pièce : elle suit son propre cœur.",
+    "Les Piliers ne meurent jamais en vain, leurs pas tracent la route des suivants.",
+    "Souvenez-vous : chaque démon a été humain un jour."
+];
+
+/* Ordre aléatoire des messages ? */
+var l_messagesRandom = true;
+
+/* Délai entre deux messages (ms) */
+var l_messagesDelay = 6000;
+
+/* Durée du fondu des messages (ms) */
+var l_messagesFade = 1000;

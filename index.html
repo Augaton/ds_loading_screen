@@ -1,48 +1,48 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Perdium Demon Slayer — Loading</title>
 
-    <link rel="stylesheet" href="css/main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600&display=swap" rel="stylesheet">
-    <title>Demon Slayer – Chargement</title>
+    <!-- Police plus "anime" -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/sleek.css">
 </head>
-
 <body>
+    <!-- Lecteur YouTube caché -->
+    <div id="player"></div>
 
-    <!-- Fond Backstretch (géré par JS) -->
+    <!-- Overlay assombrissant + texture -->
     <div id="overlay"></div>
 
-    <!-- Coup de sabre -->
-    <div id="slash-mask"></div>
+    <!-- Logo / Nom du serveur (rempli par config.js + main.js) -->
+    <div id="title"></div>
 
-    <!-- Logo -->
-    <img id="slayer-logo" alt="logo">
-
-    <!-- Texte + Barre -->
-    <div id="content">
-        <h1 id="server-name"></h1>
-        <h2 id="subtitle">Chargement en cours…</h2>
-
-        <div id="loading-bar">
-            <div id="loading-fill"></div>
-        </div>
-
-        <div id="status-text"></div>
-        <div id="file-count"></div>
-        <div id="percent-text"></div>
-
-        <div id="tip"></div>
+    <!-- Sous-titre Demon Slayer -->
+    <div id="subtitle">
+        Serveur Demon Slayer — <span id="gamemode"></span> — Carte : <span id="map"></span>
     </div>
 
-    <audio id="music-player" loop></audio>
+    <!-- Kanji décoratif -->
+    <div id="kanji"></div>
 
-    <!-- Scripts -->
+    <!-- Statut et barre de chargement -->
+    <div id="status-container">
+        <div id="status">Connexion au Domaine des Pourfendeurs...</div>
+        <div id="loading">
+            <div id="loading-progress"></div>
+        </div>
+        <div id="messages"></div>
+    </div>
+
+    <!-- Musique -->
+    <div id="music">
+        Vous écoutez actuellement<div id="music-name"></div>
+    </div>
+
     <script src="js/lib/jquery-3.7.1.min.js"></script>
     <script src="js/lib/jquery.backstretch.min.js"></script>
-
     <script src="js/config.js"></script>
     <script src="js/main.js"></script>
 </body>
