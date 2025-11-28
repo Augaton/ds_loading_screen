@@ -285,18 +285,21 @@ function spawnParticle(power) {
 
     var size = 4 + power * 12;
 
+    var bottomY = window.innerHeight - size - 2; 
+
     p.css({
         left: (Math.random() * window.innerWidth) + "px",
-        top: (window.innerHeight - 50) + "px",
+        top: bottomY + "px",
         width: size + "px",
         height: size + "px",
         opacity: 0.3 + power * 0.4
     });
 
     p.animate({
-        top: "-=200",
+        top: bottomY - 200,
         opacity: 0
     }, 1200 + Math.random() * 600, "linear", function() {
         p.remove();
     });
 }
+

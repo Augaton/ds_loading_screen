@@ -108,17 +108,20 @@ html, body {
 /* Boîte musique */
 #music-box {
     position: fixed;
-    bottom: 30px;
-    right: 5%;
-    width: 460px;
-    padding: 15px;
-    background: rgba(0,0,0,0.4);
+    bottom: 25px;
+    left: 25px;
+
+    width: auto;
+    padding: 10px 20px;
+
+    background: rgba(0,0,0,0.45);
     border-left: 3px solid #ff4e4e;
-    backdrop-filter: blur(4px);
-    text-shadow: 0 0 10px #ff3a3a;
-    font-size: 18px;
-    display: none; /* montré si musique ON */
-    z-index: 3;
+    border-radius: 5px;
+
+    pointer-events: none;
+    z-index: 2;
+
+    display: none; /* activé via JS */
 }
 
 .music-title {
