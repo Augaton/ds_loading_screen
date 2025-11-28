@@ -14,7 +14,7 @@ function shuffle(array) {
     return array;
 }
 
-var neededFiles;
+var neededFiles = 1;
 var downloadedFiles = 0;
 var barElements = null;
 
