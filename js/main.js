@@ -1,265 +1,136 @@
 "use strict";
-const BASE = window.location.origin + "/ds_loading_screen/";
 
-/* ============================================================
-                   VARIABLES GLOBALES
-============================================================ */
+/* ==============================================
+       URL ABSOLUE AUTOMATIQUE (GitHub Pages)
+============================================== */
+function full(path) {
+    return new URL(path, window.location.href).href;
+}
 
-var isGmod = false;
-var isTest = false;
+/* ==============================================
+                GMod Events
+============================================== */
 
-/* ============================================================
-                   EVENEMENTS GARRY'S MOD
-============================================================ */
+var totalFiles = 0;
 
-/* --- Nombre total de fichiers --- */
 window.SetFilesTotal = function(total) {
-    const fc = document.getElementById("file-count");
-    if (fc) fc.textContent = "Total : " + total + " fichiers";
-    window.totalFiles = total;
+    totalFiles = total;
+    $("#file-count").text("Total : " + total + " fichiers");
 };
 
-/* --- Nombre de fichiers restants --- */
 window.SetFilesNeeded = function(needed) {
-    if (!window.totalFiles || window.totalFiles <= 0) return;
+    if (totalFiles <= 0) return;
 
-    const done = window.totalFiles - needed;
-    const percent = (done / window.totalFiles) * 100;
+    const done = totalFiles - needed;
+    const percent = (done / totalFiles) * 100;
 
-    // Barre
-    document.getElementById("loading-fill").style.width = percent + "%";
-
-    // Texte du pourcentage
-    const pct = document.getElementById("percent-text");
-    if (pct) pct.textContent = Math.round(percent) + "%";
-
-    // Compteur
-    const fc = document.getElementById("file-count");
-    if (fc) fc.textContent = "Restant : " + needed + " fichiers";
+    $("#loading-fill").css("width", percent + "%");
+    $("#percent-text").text(Math.round(percent) + "%");
+    $("#file-count").text("Restant : " + needed + " fichiers");
 };
 
-/* --- Progression brute envoyée par GMod --- */
 window.AddProgress = function(progress) {
-    const fill = document.getElementById("loading-fill");
-    if (fill) fill.style.width = progress + "%";
-
-    const pct = document.getElementById("percent-text");
-    if (pct) pct.textContent = Math.round(progress) + "%";
+    $("#loading-fill").css("width", progress + "%");
+    $("#percent-text").text(Math.round(progress) + "%");
 };
 
-/* --- Fichier en cours de téléchargement --- */
-window.DownloadingFile = function(filename) {
-    filename = filename.replace("'", "").replace("?", "");
-
-    const st = document.getElementById("status-text");
-    if (st) st.textContent = "Téléchargement : " + filename;
-
-    const hist = document.getElementById("history");
-    if (hist) {
-        hist.innerHTML =
-            '<div class="history-item">' + filename + "</div>" +
-            hist.innerHTML;
-    }
-
-    const items = document.querySelectorAll(".history-item");
-    items.forEach((el, i) => {
-        if (i > 10) el.remove();
-        el.style.opacity = (1 - i * 0.1);
-    });
+window.DownloadingFile = function(fileName) {
+    $("#status-text").text("Téléchargement : " + fileName);
 };
 
-/* --- Changement de statut général --- */
 window.SetStatusChanged = function(status) {
+    $("#status-text").text(status);
 
-    const st = document.getElementById("status-text");
-    if (st) st.textContent = status;
-
-    const hist = document.getElementById("history");
-    if (hist) {
-        hist.innerHTML =
-            '<div class="history-item">' + status + "</div>" +
-            hist.innerHTML;
-
-        const items = document.querySelectorAll(".history-item");
-        items.forEach((el, i) => {
-            if (i > 10) el.remove();
-            el.style.opacity = (1 - i * 0.1);
-        });
-    }
-
-    // Boost de progression suivant le status GMod
     if (status === "Workshop Complete") {
-        document.getElementById("loading-fill").style.width = "80%";
-        document.getElementById("percent-text").textContent = "80%";
+        $("#loading-fill").css("width", "80%");
+        $("#percent-text").text("80%");
     }
-
-    else if (status === "Client info sent!") {
-        document.getElementById("loading-fill").style.width = "95%";
-        document.getElementById("percent-text").textContent = "95%";
+    if (status === "Client info sent!") {
+        $("#loading-fill").css("width", "95%");
+        $("#percent-text").text("95%");
     }
-
-    else if (status === "Starting Lua...") {
-        document.getElementById("loading-fill").style.width = "100%";
-        document.getElementById("percent-text").textContent = "100%";
+    if (status === "Starting Lua...") {
+        $("#loading-fill").css("width", "100%");
+        $("#percent-text").text("100%");
     }
 };
 
-/* --- Informations principales envoyées par GMod --- */
-function GameDetails(servername, serverurl, mapname, maxplayers, steamid) {
-    isGmod = true;
-    if (!isTest) loadAll();
+/* ==============================================
+        CHARGEMENT / BACKGROUND / LOGO / MUSIQUE
+============================================== */
 
-    // Nom du serveur
-    if (Config.title) {
-        $("#title").html(Config.title);
-    } else {
-        $("#title").html(servername);
-    }
-    $("#title").fadeIn();
-
-    // Map
-    if (Config.enableMap) {
-        $("#map").append(mapname);
-        $("#map").fadeIn();
-    } else {
-        $("#map").hide();
-    }
-
-    // SteamID
-    if (Config.enableSteamID) {
-        $("#steamid").html(steamid);
-    }
-    $("#steamid").fadeIn();
-}
-
-/* ============================================================
-                   CHARGEMENT VISUEL / UI
-============================================================ */
-
-function loadAll() {
-    $("nav").fadeIn();
-    $("main").fadeIn();
-}
-
-/* ============================================================
-                   SYSTEME DES SOUFFLES / ASSETS
-============================================================ */
-
-/* --- Applique un souffle (couleur, fond, musique, logo) --- */
 function setPillar(p) {
 
     document.documentElement.style.setProperty("--color", Config.colors[p]);
 
-    const logo = document.getElementById("slayer-logo");
-    if (logo) logo.src = BASE + "images/" + Config.logo;
+    $("#slayer-logo").attr("src", full("images/" + Config.logo));
 
-    const bg = document.getElementById("background");
-    if (bg) bg.style.backgroundImage = 'url("' + BASE + "images/" + Config.backgrounds[p] + '")';
+    $("#music-player").attr("src", full("music/" + Config.music[p]));
 
-    const music = document.getElementById("music-player");
-    if (music) music.src = BASE + "music/" + Config.music[p];
+    // Backstretch pour afficher le fond
+    $.backstretch(full("images/" + Config.backgrounds[p]));
 }
 
-/* --- Transition douce --- */
+/* ==============================================
+           Coup de sabre + changement de fond
+============================================== */
+
 function fadeToPillar(p) {
 
-    const bg = document.getElementById("background");
-    const bgNext = document.getElementById("background-next");
     const slash = document.getElementById("slash-mask");
 
-    const nextImage = BASE + "images/" + Config.backgrounds[p];
+    // Effet coup de sabre
+    slash.classList.add("slash-open");
+    slash.style.opacity = 1;
 
-    // PRÉCHARGE l’image suivante
-    const img = new Image();
-    img.src = nextImage;
+    setTimeout(() => {
 
-    img.onload = () => {
+        // Changement via Backstretch (fiable)
+        $.backstretch(full("images/" + Config.backgrounds[p]));
 
-        /* ------------------------------
-           1) Prépare le background suivant
-        --------------------------------- */
-
-        bgNext.style.backgroundImage = 'url("' + nextImage + '")';
-        bgNext.style.opacity = 0; // invisible au début
-
-        /* ------------------------------
-           2) Effet coup de sabre
-        --------------------------------- */
-
-        slash.classList.add("slash-open");
-        slash.style.opacity = 1;
-
-        // Après ouverture rapide du sabre
         setTimeout(() => {
+            slash.style.opacity = 0;
+            slash.classList.remove("slash-open");
+        }, 600);
 
-            // On montre le background suivant
-            bgNext.style.opacity = 1;
+    }, 150);
 
-            // L'ancien disparaît
-            bg.style.opacity = 0;
-
-            // Transition de 1 seconde
-            setTimeout(() => {
-
-                // Nouveau background devient le principal
-                bg.style.backgroundImage = bgNext.style.backgroundImage;
-
-                // Reset des opacités
-                bg.style.opacity = 1;
-                bgNext.style.opacity = 0;
-
-                // Disparition du sabre
-                slash.style.opacity = 0;
-                slash.classList.remove("slash-open");
-
-            }, 600);
-
-        }, 150); // délai du slash
-
-        /* ------------------------------
-           3) Apply couleur / logo / musique
-        --------------------------------- */
-
-        document.documentElement.style.setProperty("--color", Config.colors[p]);
-        document.getElementById("slayer-logo").src = BASE + "images/" + Config.logo;
-        document.getElementById("music-player").src = BASE + "music/" + Config.music[p];
-    };
+    // Mise à jour couleurs / logo / musique
+    document.documentElement.style.setProperty("--color", Config.colors[p]);
+    $("#slayer-logo").attr("src", full("images/" + Config.logo));
+    $("#music-player").attr("src", full("music/" + Config.music[p]));
 }
 
-
-/* ============================================================
-                   ASTUCES (TIPS)
-============================================================ */
+/* ==============================================
+                 TIPS
+============================================== */
 
 function startTipsRotation() {
     if (!Config.tips || !Config.tips.length) return;
 
-    const tipEl = document.getElementById("tip");
-    if (!tipEl) return;
-
-    function setRandomTip() {
+    function change() {
         const tip = Config.tips[Math.floor(Math.random() * Config.tips.length)];
-        tipEl.textContent = tip;
+        $("#tip").text(tip);
     }
 
-    setRandomTip();
-    setInterval(setRandomTip, 8000); // 8 secondes
+    change();
+    setInterval(change, 8000);
 }
 
-/* ============================================================
-                   CHARGEMENT INITIAL
-============================================================ */
+/* ==============================================
+                 INIT
+============================================== */
 
 window.onload = () => {
 
-    // Premier souffle
+    // Fond initial + logo + musique
     setPillar(Config.pillar);
 
-    // Rotation des tips
     startTipsRotation();
 
-    // Cycle automatique des souffles
+    // Cycle automatique
     if (Config.cycle.enabled) {
+
         let index = Config.cycle.order.indexOf(Config.pillar);
         if (index === -1) index = 0;
 
