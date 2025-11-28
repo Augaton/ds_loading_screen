@@ -3,47 +3,48 @@
 <head>
     <meta charset="utf-8">
     <title>Perdium Demon Slayer — Loading</title>
-
-    <!-- Police plus "anime" -->
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="css/sleek.css">
 </head>
+
 <body>
-    <!-- Lecteur YouTube caché -->
-    <div id="player"></div>
 
-    <!-- Overlay assombrissant + texture -->
-    <div id="overlay"></div>
+    <div id="background-overlay"></div>
 
-    <!-- Logo / Nom du serveur (rempli par config.js + main.js) -->
-    <div id="title"></div>
-
-    <!-- Sous-titre Demon Slayer -->
-    <div id="subtitle">
-        Serveur Demon Slayer — <span id="gamemode"></span> — Carte : <span id="map"></span>
-    </div>
-
-    <!-- Kanji décoratif -->
+    <!-- Kanji géant flottant -->
     <div id="kanji"></div>
 
-    <!-- Statut et barre de chargement -->
-    <div id="status-container">
-        <div id="status">Connexion au Domaine des Pourfendeurs...</div>
-        <div id="loading">
+    <!-- Panneau central -->
+    <div id="panel">
+        <div id="logo"></div>
+
+        <div id="server-info">
+            <div class="label">Mode de jeu</div>
+            <div class="value" id="gamemode"></div>
+
+            <div class="label">Carte chargée</div>
+            <div class="value" id="map"></div>
+        </div>
+
+        <div id="status"></div>
+
+        <div id="progress-bar">
             <div id="loading-progress"></div>
         </div>
-        <div id="messages"></div>
+
+        <div id="tips"></div>
     </div>
 
     <!-- Musique -->
-    <div id="music">
-        Vous écoutez actuellement<div id="music-name"></div>
+    <div id="music-box">
+        <div class="music-title">Musique</div>
+        <div id="music-name"></div>
     </div>
 
     <script src="js/lib/jquery-3.7.1.min.js"></script>
     <script src="js/lib/jquery.backstretch.min.js"></script>
     <script src="js/config.js"></script>
     <script src="js/main.js"></script>
+
 </body>
 </html>
