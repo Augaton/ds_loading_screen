@@ -1,0 +1,246 @@
+/* ==============================
+   CONFIG GÉNÉRALE & RENDU CEF
+================================= */
+
+:root {
+    --color: #ffffff; /* sera remplacé par le JS */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Crimson Pro", serif;
+    background: #000;
+    color: white;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* CRT Lignes */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        transparent 0 2px,
+        rgba(255,255,255,0.02) 2px 4px
+    );
+}
+
+/* ==============================
+         FOND + ANIMATION
+================================= */
+
+#background {
+    position: fixed;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.52) blur(2px);
+    transform: translateZ(0); /* GPU */
+    animation: bgMove 12s infinite ease-in-out;
+}
+
+@keyframes bgMove {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+}
+
+/* ==============================
+             LOGO
+================================= */
+
+#slayer-logo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 150px;
+    filter: drop-shadow(0 0 15px var(--color)) drop-shadow(0 0 30px var(--color));
+    transition: filter 0.3s;
+}
+
+/* ==============================
+           CONTENU CENTRAL
+================================= */
+
+#content {
+    position: fixed;
+    bottom: 12%;
+    width: 100%;
+    text-align: center;
+    text-shadow: 0 0 8px #000;
+}
+
+#server-name {
+    font-size: 3.2rem;
+    animation: glow 3s infinite ease-in-out;
+}
+
+@keyframes glow {
+    0%, 100% { text-shadow: 0 0 8px var(--color); }
+    50% { text-shadow: 0 0 22px var(--color); }
+}
+
+#subtitle {
+    margin-top: 5px;
+    font-size: 1.5rem;
+    opacity: .85;
+}
+
+/* ==============================
+           BARRE DE LOAD
+================================= */
+
+#loading-bar {
+    width: 45%;
+    height: 14px;
+    margin: 25px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.18);
+}
+
+#loading-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--color), transparent);
+    animation: breathing 3s infinite ease-in-out;
+    transform: translateZ(0); /* GPU */
+}
+
+@keyframes breathing {
+    0%, 100% { filter: brightness(0.7); }
+    50% { filter: brightness(1.4); }
+}
+
+/* ==============================
+              TIPS
+================================= */
+
+#tip {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    opacity: 0;
+    animation: tipFade 6s infinite;
+}
+
+@keyframes tipFade {
+    0% { opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* ==============================
+           STATUT CHARGEMENT
+================================= */
+
+#load-status {
+    position: fixed;
+    bottom: 3%;
+    width: 100%;
+    text-align: center;
+    line-height: 1.5rem;
+    font-size: 1.3rem;
+    color: white;
+    text-shadow: 0 0 8px #000;
+}
+
+#status-text {
+    opacity: .9;
+    font-size: 1.2rem;
+}
+
+#file-count {
+    opacity: .85;
+    font-size: 1.1rem;
+}
+
+#percent-text {
+    margin-top: 4px;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--color);
+    text-shadow: 0 0 12px var(--color);
+}
+
+/* ==============================
+         TRANSITIONS GÉNÉRALES
+================================= */
+
+.transition-fade {
+    transition: opacity 1.5s ease-in-out, filter 1.5s;
+}
+
+.fade-out {
+    opacity: 0;
+    filter: blur(8px);
+}
+
+.fade-in {
+    opacity: 1;
+}
+
+/* ============================================
+     PRE-FADE SYSTEM (BACKGROUND LAYER)
+============================================ */
+
+#background-next {
+    position: fixed;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.52) blur(2px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.4s ease-in-out;
+}
+
+/* ============================================
+   FADE VERTICAL / COUP DE SABRE
+============================================ */
+
+#slash-mask {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 20; /* au-dessus de tout */
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+}
+
+/* Lignes du tranchant */
+#slash-mask::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 3px; /* ligne centrale */
+    height: 100%;
+    background: white;
+    box-shadow:
+        0 0 25px white,
+        0 0 50px var(--color),
+        0 0 90px var(--color);
+    transform: translateX(-50%);
+    opacity: 0;
+}
+
+/* Ouverture du sabre */
+.slash-open::before {
+    opacity: 1;
+    animation: slashExpand 0.25s ease-out forwards;
+}
+
+@keyframes slashExpand {
+    0% { width: 3px; }
+    100% { width: 100%; }
+}

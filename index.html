@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Compatibilité maximale GMod - désactive certains comportements dangereux -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Force le bon scaling sans zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="css/main.css">
+
+    <!-- Police (chargée tôt pour éviter un flash) -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600&display=swap" rel="stylesheet">
+
+    <title>Demon Slayer – Chargement</title>
+</head>
+
+<body>
+
+    <!-- FOND -->
+    <div id="background" class="transition-fade"></div>
+    <div id="background-next"></div>
+    <div id="slash-mask"></div>
+
+    <!-- LOGO -->
+    <img id="slayer-logo" class="transition-fade" alt="Logo">
+
+    <!-- CONTENU PRINCIPAL -->
+    <div id="content">
+
+        <h1 id="server-name"></h1>
+        <h2 id="subtitle">Chargement en cours…</h2>
+
+        <!-- BARRE -->
+        <div id="loading-bar">
+            <div id="loading-fill"></div>
+        </div>
+
+        <!-- ASTUCE -->
+        <div id="tip"></div>
+
+        <!-- STATUS AVANCÉ -->
+        <div id="load-status">
+            <div id="status-text"></div>
+            <div id="file-count"></div>
+            <div id="percent-text"></div>
+        </div>
+
+    </div>
+
+    <!-- MUSIQUE -->
+    <audio id="music-player" loop></audio>
+
+    <!-- =========================
+          SCRIPTS (ordre critique)
+       ========================= -->
+
+    <!-- jQuery doit être chargé AVANT tout -->
+    <script src="js/lib/jquery-3.4.1.min.js"></script>
+
+    <!-- Config FIRST -->
+    <script src="js/config.js"></script>
+
+    <!-- Script principal -->
+    <script src="js/main.js"></script>
+
+</body>
+</html>
