@@ -26,7 +26,7 @@ html, body {
 .backstretch {
     position: fixed !important;
     inset: 0 !important;
-    z-index: 0 !important;
+    z-index: -10 !important; /* toujours au fond */
     object-fit: cover !important;
     filter: brightness(0.52) blur(2px);
 }
@@ -34,8 +34,9 @@ html, body {
 /* Empêche #background et #background-next de masquer Backstretch */
 #background,
 #background-next {
+    z-index: -5 !important;
     background: transparent !important;
-    z-index: 1 !important;
+    position: fixed;
 }
 
 
