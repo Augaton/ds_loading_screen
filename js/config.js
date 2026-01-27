@@ -22,14 +22,18 @@ var l_bgVideo = false;
 /* Vidéo de fond (si l_bgVideo = true) */
 var l_background = "backgrounds/videos/glimmering.webm";
 
-/* Images de fond
-   Tu peux en ajouter / retirer autant que tu veux */
+/* Images de fond avec leur couleur de "Souffle" associée */
 var l_bgImages = [
-    "backgrounds/images/bg_flame.jpg",
-    "backgrounds/images/bg_moon.jpg",
-    "backgrounds/images/bg_sun.jpg",
-    "backgrounds/images/bg_thunder.jpg",
-    "backgrounds/images/bg_water.jpg"
+    // Rengoku / Feu -> Rouge
+    { src: "backgrounds/images/bg_flame.jpg", color: "#ff4e4e", shadow: "#ff0000" },
+    // Tanjiro / Eau -> Bleu Cyan
+    { src: "backgrounds/images/bg_water.jpg", color: "#42cdff", shadow: "#008cff" },
+    // Zenitsu / Foudre -> Jaune Électrique
+    { src: "backgrounds/images/bg_thunder.jpg", color: "#ffe600", shadow: "#ffaa00" },
+    // Kokushibo / Lune -> Violet
+    { src: "backgrounds/images/bg_moon.jpg", color: "#d24eff", shadow: "#8c00ff" },
+    // Yoriichi / Soleil -> Rouge vif
+    { src: "backgrounds/images/bg_sun.jpg", color: "#ff4e4e", shadow: "#ff0000" }
 ];
 
 /* Ordre aléatoire des images de fond ? */
@@ -39,7 +43,7 @@ var l_bgImagesRandom = true;
 var l_bgImageDuration = 7000;
 
 /* Vitesse de fondu entre deux fonds (ms) */
-var l_bgImageFadeVelocity = 2500;
+var l_bgImageFadeVelocity = 3500;
 
 /* Assombrissement de l’arrière-plan
    0 = aucun, 100 = noir complet */

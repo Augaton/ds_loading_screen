@@ -1,25 +1,25 @@
 // Array randomizer (Fisher–Yates)
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
-
     while (0 !== currentIndex) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
-
         temporaryValue = array[currentIndex];
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
     return array;
 }
 
 var neededFiles = 1;
 var downloadedFiles = 0;
-var barElements = null;
+var isGMod = false; // Flag pour savoir si on est en jeu
 
 // Fonctions appelées par Garry's Mod
 function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
+    isGMod = true; // GMod est détecté !
+    $("#start-screen").remove(); // Pas besoin d'écran de start sur GMod
+    
     setGamemode(gamemode);
     setMapname(mapname);
 
@@ -31,8 +31,10 @@ function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemo
 function DownloadingFile(fileName) {
     downloadedFiles++;
     refreshProgress();
-
-    setStatus("Téléchargement des ressources du Corps des Pourfendeurs...");
+    
+    // On extrait juste le nom du fichier pour faire plus propre
+    var cleanName = fileName.split('/').pop();
+    setStatus("Téléchargement : " + cleanName);
 }
 
 function SetStatusChanged(status) {
@@ -43,24 +45,14 @@ function SetStatusChanged(status) {
         setProgress(100);
     }
 
-    // Traduction légère de certains statuts pour le thème Demon Slayer
     var prettyStatus = status;
-
-    if (status === "Retrieving server info...") {
-        prettyStatus = "Connexion au Domaine des Pourfendeurs...";
-    } else if (status === "Workshop Complete") {
-        prettyStatus = "Atelier : armes et uniformes prêts.";
-    } else if (status === "Sending client info...") {
-        prettyStatus = "Envoi de vos informations au Quartier Général...";
-    }
+    if (status === "Retrieving server info...") prettyStatus = "Connexion au Domaine des Pourfendeurs...";
+    else if (status === "Workshop Complete") prettyStatus = "Forge Nichirin : Armes prêtes.";
+    else if (status === "Sending client info...") prettyStatus = "Synchronisation de l'âme...";
+    else if (status.indexOf("Mounting Addon") !== -1) prettyStatus = "Installation des techniques de souffle...";
 
     setStatus(prettyStatus);
 }
-
-/* Useless...
-function SetFilesTotal( total ) {
-    console.log("SetFilesTotal("+total+")");
-}*/
 
 function SetFilesNeeded(needed) {
     neededFiles = needed + 1;
@@ -72,208 +64,207 @@ function refreshProgress() {
 }
 
 // Helpers DOM
-function setStatus(text) {
-    $("#status").html(text);
-}
-
-function setProgress(progress) {
-    $("#loading-progress").css("width", progress + "%");
-}
-
-function setGamemode(gamemode) {
-    $("#gamemode").html(gamemode);
-}
-
-function setMapname(mapname) {
-    $("#map").html(mapname);
-}
-
-function setServerName(servername) {
-    $("#title").html(servername);
-}
+function setStatus(text) { $("#status").html(text); }
+function setProgress(progress) { $("#loading-progress").css("width", progress + "%"); }
+function setGamemode(gamemode) { $("#gamemode").html(gamemode); }
+function setMapname(mapname) { $("#map").html(mapname); }
+function setServerName(servername) { $("#title").html(servername); }
 
 function setMusicName(name) {
-    $("#music-name").fadeOut(2000, function () {
+    $("#music-name").fadeOut(1000, function () {
         $(this).html(name);
-        $(this).fadeIn(2000);
+        $(this).fadeIn(1000);
     });
 }
 
-var actualMusic = -1;
+// --- LOGIQUE DEMO MODE (NAVIGATEUR) ---
+function initDemoMode() {
+    console.log("Mode Navigateur détecté : Lancement automatique de la simulation.");
+    
+    // On lance la simulation visuelle immédiatement
+    simulateLoading();
 
-// Initialisation DOM / thème Demon Slayer
+    // On tente de lancer la musique
+    // (Note : Sur Chrome PC, ça peut échouer sans clic, mais sur GMod ça marchera)
+    if (l_music) {
+        if (l_musicDisplay) $("#music-box").show();
+        
+        // Petit délai pour laisser le navigateur respirer
+        setTimeout(function() {
+            nextMusic();
+        }, 100);
+    }
+}
+
+function simulateLoading() {
+    // 1. Simuler GameDetails
+    setGamemode("DarkRP (Démon)");
+    setMapname("rp_demon_slayer_v2");
+    if(l_serverName) setServerName(l_serverName);
+
+    // 2. Simuler les téléchargements
+    var fakeFiles = 100;
+    SetFilesNeeded(fakeFiles);
+    
+    var currentFile = 0;
+    var demoInterval = setInterval(function() {
+        currentFile++;
+        
+        // Faux fichiers pour l'ambiance
+        var types = ["materials/breath_water.vtf", "models/tanjiro_katana.mdl", "sound/zenitsu_scream.wav", "lua/autorun/breathing_system.lua"];
+        var randomFile = types[Math.floor(Math.random() * types.length)];
+        
+        DownloadingFile(randomFile);
+        
+        // Changer de statut de temps en temps
+        if(currentFile === 20) SetStatusChanged("Retrieving server info...");
+        if(currentFile === 60) SetStatusChanged("Workshop Complete");
+        if(currentFile === 90) SetStatusChanged("Mounting Addon");
+
+        if (currentFile >= fakeFiles) {
+            clearInterval(demoInterval);
+            SetStatusChanged("Sending client info...");
+        }
+    }, 150); // Vitesse du chargement démo
+}
+
+// Initialisation
 $(function () {
     // Randomisation
-    if (l_bgImagesRandom)
-        l_bgImages = shuffle(l_bgImages);
+    if (l_bgImagesRandom) l_bgImages = shuffle(l_bgImages);
+    if (l_musicRandom) l_musicPlaylist = shuffle(l_musicPlaylist);
+    if (l_messagesRandom) l_messages = shuffle(l_messages);
 
-    if (l_musicRandom)
-        l_musicPlaylist = shuffle(l_musicPlaylist);
+    // Messages
+    if (l_messagesEnabled) showMessage(0);
 
-    if (l_messagesRandom)
-        l_messages = shuffle(l_messages);
-
-    // Affichage des messages personnalisés
-    if (l_messagesEnabled)
-        showMessage(0);
-
-    // Musique
-	if (l_music) {
-		if (l_musicDisplay)
-			$("#music-box").show();
-
-		nextMusic(); // lecture locale uniquement
-	}
-
-
-    // Fond (vidéo ou images backstretch)
+    // Fond
+// Fond (vidéo ou images backstretch)
     if (l_bgVideo) {
         $("body").append("<video loop autoplay muted><source src='" + l_background + "' type='video/webm'></video>");
     } else {
-        $.backstretch(l_bgImages, {
+        var bgUrls = l_bgImages.map(function(item) { return item.src; });
+
+        var instance = $.backstretch(bgUrls, {
             duration: l_bgImageDuration,
             fade: l_bgImageFadeVelocity
         });
+
+        $(window).on("backstretch.show", function(e, instance) {
+            var index = instance.index;
+            var theme = l_bgImages[index];
+
+            // Si une couleur est définie, on l'applique aux variables CSS
+            if (theme && theme.color) {
+                document.documentElement.style.setProperty('--theme-color', theme.color);
+                document.documentElement.style.setProperty('--theme-shadow', theme.shadow || theme.color);
+                
+                // Petit bonus : Changer la couleur du texte Kanji géant aussi
+                $("#kanji").css("text-shadow", "0 0 40px " + theme.color);
+            }
+        });
+        
+        if(l_bgImages.length > 0) {
+             var firstTheme = l_bgImages[0];
+             document.documentElement.style.setProperty('--theme-color', firstTheme.color);
+             document.documentElement.style.setProperty('--theme-shadow', firstTheme.shadow || firstTheme.color);
+        }
     }
 
-    // Nom / logo du serveur
-    if (l_serverName && !l_serverImage)
-        setServerName(l_serverName);
-
-    if (l_serverImage)
-        setServerName("<img src='" + l_serverImage + "' height='140'>");
-
-    // Assombrissement de l'overlay
+    if (l_serverImage) $("#logo").html("<img src='" + l_serverImage + "' style='max-height:100%; max-width:100%;'>");
     $("#overlay").css("background-color", "rgba(0,0,0," + (l_bgDarkening / 100) + ")");
 
-    // Kanji Demon Slayer aléatoire
-    var kanjiList = ["炎", "水", "雷", "岩", "風", "霞", "恋", "蛇", "音", "日", "月", "花"];
-    var k = kanjiList[Math.floor(Math.random() * kanjiList.length)];
-    $("#kanji").html(k);
+    // Kanji Animation
+    setInterval(function() {
+        var kanjiList = ["炎", "水", "雷", "岩", "風", "霞", "恋", "蛇", "音", "日", "月", "花", "鬼", "滅"];
+        var k = kanjiList[Math.floor(Math.random() * kanjiList.length)];
+        $("#kanji").fadeOut(1000, function() {
+            $(this).html(k).fadeIn(1000);
+        });
+    }, 8000); // Change le Kanji toutes les 8s
+
+    // DETECTION GMOD VS NAVIGATEUR
+    // Si après 500ms GameDetails n'a pas été appelé, on suppose qu'on est sur navigateur
+    setTimeout(function() {
+        if (!isGMod) {
+            initDemoMode();
+        }
+    }, 500);
 });
 
-//--------------------------------------------------
-//  AUDIO LOCAL + VISUALISATION "RESPIRATION / PULSATION"
-//--------------------------------------------------
-
+// AUDIO PLAYER & VISUALIZER
 var audioPlayer = null;
 var currentTrack = -1;
 
 function nextMusic() {
     currentTrack++;
-
-    if (currentTrack >= l_musicPlaylist.length)
-        currentTrack = 0;
-
+    if (currentTrack >= l_musicPlaylist.length) currentTrack = 0;
     var track = l_musicPlaylist[currentTrack];
 
-    // On supprime l'ancien son
     $("audio").remove();
-
-    // Nouveau son
     $("body").append('<audio id="music-audio" src="' + track.ogg + '" autoplay>');
     audioPlayer = document.getElementById("music-audio");
     audioPlayer.volume = l_musicVolume / 100;
-
-    // Nom affiché
+    
     setMusicName(track.name);
+    
+    // Animation pulse sur la box
+    $("#music-box").addClass("music-pulse");
+    setTimeout(() => { $("#music-box").removeClass("music-pulse"); }, 500);
 
-	$("#music-box").addClass("music-pulse");
-	setTimeout(() => { $("#music-box").removeClass("music-pulse"); }, 500);
-
-    // Quand terminé → suivant
-    audioPlayer.onended = function() {
-        nextMusic();
-    };
-
-    startVisualizer();
+    audioPlayer.onended = function() { nextMusic(); };
+    
+    // Lancer le visualizer seulement si l'audio joue vraiment
+    audioPlayer.play().then(() => {
+        startVisualizer();
+    }).catch(e => {
+        console.log("Autoplay bloqué par le navigateur (normal en dehors de GMod)");
+    });
 }
 
-// Départ automatique
-if (l_music) {
-    if (l_musicDisplay)
-        $("#music-box").show();
-
-    nextMusic(); // lecture locale uniquement
-}
-
-
-
-// Messages (tips Demon Slayer)
 function showMessage(message) {
-    if (message >= l_messages.length)
-        message = 0;
-
+    if (message >= l_messages.length) message = 0;
     $("#messages").fadeOut(l_messagesFade, function () {
-        $(this).html(l_messages[message]);
+        $(this).html('"' + l_messages[message] + '"');
         $(this).fadeIn(l_messagesFade);
     });
-
-    setTimeout(function () {
-        showMessage(message + 1);
-    }, l_messagesDelay + l_messagesFade * 2);
+    setTimeout(function () { showMessage(message + 1); }, l_messagesDelay + l_messagesFade * 2);
 }
 
-//--------------------------------------------------
-// VISUALISATION : RESPIRATION + PARTICULES
-//--------------------------------------------------
-
+// Visualizer simple
 var breathingIntensity = 0;
 var breathingDirection = 1;
 var particleInterval = null;
 
 function startVisualizer() {
-
-    // Effet respiration (pulsation panneau)
     clearInterval(particleInterval);
     particleInterval = setInterval(function() {
+        if (!audioPlayer || audioPlayer.paused) return;
 
-        if (!audioPlayer) return;
+        breathingIntensity += 0.02 * breathingDirection;
+        if (breathingIntensity > 1) { breathingIntensity = 1; breathingDirection = -1; }
+        if (breathingIntensity < 0) { breathingIntensity = 0; breathingDirection = 1; }
 
-        // Intensité basée sur le volume instantané du .ogg
-        // (on simule une "lecture amplitude" car pas de WebAudio API)
-        breathingIntensity += 0.03 * breathingDirection;
-
-        if (breathingIntensity > 1) {
-            breathingIntensity = 1;
-            breathingDirection = -1;
+        // Glow rouge sang
+        $("#panel").css("box-shadow", "0 0 " + (15 + breathingIntensity * 25) + "px rgba(255, 40, 40, " + (0.3 + breathingIntensity * 0.3) + ")");
+        
+        // Spawn de particules aléatoire (plus intense quand la 'respiration' est haute)
+        if(Math.random() < (0.1 + breathingIntensity * 0.2)) {
+            spawnParticle(breathingIntensity);
         }
-        if (breathingIntensity < 0) {
-            breathingIntensity = 0;
-            breathingDirection = 1;
-        }
-
-        // Effet sur panneau
-        $("#panel").css("box-shadow", "0 0 " + (10 + breathingIntensity * 30) + "px rgba(255,40,40," + (0.4 + breathingIntensity * 0.4) + ")");
-
-        // Particules
-        spawnParticle(breathingIntensity);
-
     }, 50);
 }
 
 function spawnParticle(power) {
-
     var p = $("<div class='ds-particle'></div>");
     $("body").append(p);
-
-    var size = 4 + power * 12;
-
-    var bottomY = window.innerHeight - size - 2; 
-
+    var size = 3 + Math.random() * 8;
     p.css({
-        left: (Math.random() * window.innerWidth) + "px",
-        top: bottomY + "px",
+        left: (Math.random() * 100) + "vw",
+        top: "100vh",
         width: size + "px",
         height: size + "px",
-        opacity: 0.3 + power * 0.4
+        opacity: 0.4 + power * 0.6
     });
-
-    p.animate({
-        top: bottomY - 200,
-        opacity: 0
-    }, 1200 + Math.random() * 600, "linear", function() {
-        p.remove();
-    });
+    p.animate({ top: (window.innerHeight - 300 - Math.random()*200) + "px", opacity: 0 }, 2000 + Math.random() * 2000, "linear", function() { p.remove(); });
 }
-

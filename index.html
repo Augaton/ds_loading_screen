@@ -10,37 +10,39 @@
 <body>
 
     <div id="background-overlay"></div>
-	<div id="overlay" style="display:none;"></div>
+    <div id="overlay" style="display:none;"></div>
 
-    <!-- Kanji géant flottant -->
     <div id="kanji"></div>
 
-    <!-- Panneau central -->
     <div id="panel">
         <div id="logo"></div>
 
         <div id="server-info">
-            <div class="label">Mode de jeu</div>
-            <div class="value" id="gamemode"></div>
-
-            <div class="label">Carte chargée</div>
-            <div class="value" id="map"></div>
+            <div class="info-group">
+                <div class="label">Mode de jeu</div>
+                <div class="value" id="gamemode">Recherche...</div>
+            </div>
+            <div class="info-group">
+                <div class="label">Carte chargée</div>
+                <div class="value" id="map">Inconnue</div>
+            </div>
         </div>
 
-        <div id="status"></div>
+        <div id="status">En attente du signal...</div>
 
-		<div id="progress-bar">
-			<div id="loading-progress"></div>
-		</div>
+        <div id="progress-bar">
+            <div id="loading-progress"></div>
+        </div>
 
-
-        <div id="tips"></div>
+        <div id="messages"></div>
     </div>
 
-    <!-- Musique -->
     <div id="music-box">
-        <div class="music-title">Musique</div>
-        <div id="music-name"></div>
+        <div class="music-icon">♫</div>
+        <div class="music-info">
+            <div class="music-title">Musique</div>
+            <div id="music-name">...</div>
+        </div>
     </div>
 
     <script src="js/lib/jquery-3.7.1.min.js"></script>
