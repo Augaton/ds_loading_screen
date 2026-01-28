@@ -139,7 +139,7 @@ html, body {
 /* Tips */
 #tips {
     font-size: 18px;
-    opacity: 0.9;
+    opfcity: 0.9;
     text-shadow: 0 0 6px #c40000;
     min-height: 30px;
 }
@@ -273,4 +273,26 @@ html, body {
         box-shadow 2.5s linear,      
         text-shadow 2.5s linear,     
         filter 2.5s linear;          
+}
+
+#loading-progress::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent
+    );
+    animation: blade-shine 3s infinite;
+}
+
+@keyframes blade-shine {
+    0% { left: -100%; }
+    20% { left: 150%; }
+    100% { left: 150%; }
 }

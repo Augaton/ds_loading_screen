@@ -149,18 +149,19 @@ $(function () {
             duration: l_bgImageDuration,
             fade: l_bgImageFadeVelocity
         });
-
+        
         $(window).on("backstretch.show", function(e, instance) {
             var index = instance.index;
             var theme = l_bgImages[index];
 
-            // Si une couleur est définie, on l'applique aux variables CSS
-            if (theme && theme.color) {
+            if (theme) {
                 document.documentElement.style.setProperty('--theme-color', theme.color);
                 document.documentElement.style.setProperty('--theme-shadow', theme.shadow || theme.color);
                 
-                // Petit bonus : Changer la couleur du texte Kanji géant aussi
-                $("#kanji").css("text-shadow", "0 0 40px " + theme.color);
+                // Mise à jour du Kanji liée au fond
+                $("#kanji").fadeOut(1000, function() {
+                    $(this).html(theme.kanji || "滅").fadeIn(1000);
+                });
             }
         });
         
@@ -255,9 +256,16 @@ function startVisualizer() {
     }, 50);
 }
 
+var particleCount = 0;
+const MAX_PARTICLES = 40; // Limite de sécurité pour GMod
+
 function spawnParticle(power) {
+    if (particleCount >= MAX_PARTICLES) return; // Sécurité anti-crash
+
     var p = $("<div class='ds-particle'></div>");
     $("body").append(p);
+    particleCount++;
+
     var size = 3 + Math.random() * 8;
     p.css({
         left: (Math.random() * 100) + "vw",
@@ -266,5 +274,13 @@ function spawnParticle(power) {
         height: size + "px",
         opacity: 0.4 + power * 0.6
     });
-    p.animate({ top: (window.innerHeight - 300 - Math.random()*200) + "px", opacity: 0 }, 2000 + Math.random() * 2000, "linear", function() { p.remove(); });
+
+    // Animation optimisée
+    p.animate({ 
+        top: (window.innerHeight - 300 - Math.random() * 200) + "px", 
+        opacity: 0 
+    }, 2000 + Math.random() * 2000, "linear", function() { 
+        p.remove(); 
+        particleCount--; // On libère la place
+    });
 }

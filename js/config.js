@@ -24,16 +24,11 @@ var l_background = "backgrounds/videos/glimmering.webm";
 
 /* Images de fond avec leur couleur de "Souffle" associée */
 var l_bgImages = [
-    // Rengoku / Feu -> Rouge
-    { src: "backgrounds/images/bg_flame.jpg", color: "#ff4e4e", shadow: "#ff0000" },
-    // Tanjiro / Eau -> Bleu Cyan
-    { src: "backgrounds/images/bg_water.jpg", color: "#42cdff", shadow: "#008cff" },
-    // Zenitsu / Foudre -> Jaune Électrique
-    { src: "backgrounds/images/bg_thunder.jpg", color: "#ffe600", shadow: "#ffaa00" },
-    // Kokushibo / Lune -> Violet
-    { src: "backgrounds/images/bg_moon.jpg", color: "#d24eff", shadow: "#8c00ff" },
-    // Yoriichi / Soleil -> Rouge vif
-    { src: "backgrounds/images/bg_sun.jpg", color: "#ff4e4e", shadow: "#ff0000" }
+    { src: "backgrounds/images/bg_flame.jpg", color: "#ff4e4e", shadow: "#ff0000", kanji: "炎" },
+    { src: "backgrounds/images/bg_water.jpg", color: "#42cdff", shadow: "#008cff", kanji: "水" },
+    { src: "backgrounds/images/bg_thunder.jpg", color: "#ffe600", shadow: "#ffaa00", kanji: "雷" },
+    { src: "backgrounds/images/bg_moon.jpg", color: "#d24eff", shadow: "#8c00ff", kanji: "月" },
+    { src: "backgrounds/images/bg_sun.jpg", color: "#ff4e4e", shadow: "#ff0000", kanji: "日" }
 ];
 
 /* Ordre aléatoire des images de fond ? */
